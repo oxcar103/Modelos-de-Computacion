@@ -1,0 +1,305 @@
+%%
+% Plantilla de Memoria
+% Modificación de una plantilla de Latex de Nicolas Diaz para adaptarla 
+% al castellano y a las necesidades de escribir informática y matemáticas.
+%
+% Editada por: Mario Román
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%%
+
+%%%%%%%%%%%%%%%%%%%%%
+% Thin Sectioned Essay
+% LaTeX Template
+% Version 1.0 (3/8/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original Author:
+% Nicolas Diaz (nsdiaz@uc.cl) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PAQUETES Y CONFIGURACIÓN DEL DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+%% Configuración del papel.
+% microtype: Tipografía.
+% mathpazo: Usa la fuente Palatino.
+\documentclass[a4paper, 11pt]{article}
+\usepackage[protrusion=true,expansion=true]{microtype}
+\usepackage{mathpazo}
+
+% Indentación de párrafos para Palatino
+\setlength{\parindent}{0pt}
+  \parskip=8pt
+\linespread{1.05} % Change line spacing here, Palatino benefits from a slight increase by default
+
+
+%% Castellano.
+% noquoting: Permite uso de comillas no españolas.
+% lcroman: Permite la enumeración con numerales romanos en minúscula.
+% fontenc: Usa la fuente completa para que pueda copiarse correctamente del pdf.
+\usepackage[spanish,es-noquoting,es-lcroman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\selectlanguage{spanish}
+
+
+%% Gráficos
+\usepackage{graphicx} % Required for including pictures
+\usepackage{wrapfig} % Allows in-line images
+\usepackage[usenames,dvipsnames]{color} % Coloring code
+
+
+%% Matemáticas
+\usepackage{amsmath}
+
+
+%% Bibliografía
+\makeatletter
+\renewcommand\@biblabel[1]{\textbf{#1.}} % Change the square brackets for each bibliography item from '[1]' to '1.'
+\renewcommand{\@listI}{\itemsep=0pt} % Reduce the space between items in the itemize and enumerate environments and the bibliography
+
+\usepackage{qtree}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+
+%----------------------------------------------------------------------------------------
+%	TÍTULO
+%----------------------------------------------------------------------------------------
+% Configuraciones para el título.
+% El título no debe editarse aquí.
+\renewcommand{\maketitle}{
+  \begin{flushright} % Right align
+  
+  {\LARGE\@title} % Increase the font size of the title
+  
+  \vspace{50pt} % Some vertical space between the title and author name
+  
+  {\large\@author} % Author name
+  \\\@date % Date
+  \vspace{40pt} % Some vertical space between the author block and abstract
+  \end{flushright}
+}
+
+% Título
+\title{\textbf{Modelos de Computación}\\ % Title
+Relación de Prácticas 5} % Subtitle
+
+\author{\textsc{Óscar Bermúdez Garrido} % Author
+\\{\textit{Universidad de Granada}}} % Institution
+
+\date{\today} % Date
+
+
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title section
+
+\begin{enumerate}
+	\item Demuestra que la siguiente gramática libre de contexto es ambigua.
+	
+	$S \rightarrow S_1S_2$ | $S_4S_5$
+	\newline $S_1 \rightarrow aS_1b$ | $\varepsilon$
+	\quad $S_2 \rightarrow cS_2$ | $S_3$
+	\quad $S_3 \rightarrow dS_3$ | $\varepsilon$
+	\newline $S_4 \rightarrow aS_4$ | $S_6$
+	\quad $S_5 \rightarrow cS_5d$ | $\varepsilon$
+	\quad $S_6 \rightarrow bS_6$ | $\varepsilon$
+	
+	\begin{itemize}
+		\item Determina el lenguaje que genera esta gramática.
+		\item Encuentra una gramática no ambigua que genere el lenguaje.
+	\end{itemize}
+	
+	La gramática es ambigua ya que la palabra $\varepsilon$ tiene dos árboles de derivación:
+	
+	\Tree [.$S$ [.$S_1$ $\varepsilon$ ] [.$S_2$ [.$S_3$ $\varepsilon$ ] ] ]
+	\Tree [.$S$ [.$S_4$ [.$S_6$ $\varepsilon$ ] ] [.$S_5$ $\varepsilon$ ] ]
+	
+	Esta gramática genera el lenguaje $L = \{a^ib^jc^kd^l: i=j \vee k=l \}$
+	
+	Una gramática no ambigua que genera el mismo lenguaje sería:
+	
+	$S \rightarrow S_1S_2$ | $S_4S_5$
+	\newline $S_1 \rightarrow aS_1b$ | $\varepsilon$
+	\quad $S_2 \rightarrow cS_2$ | $S_3$
+	\quad $S_3 \rightarrow dS_3$ | $\varepsilon$
+	\newline $S_4 \rightarrow aS_4b$ | $S_6$ | $S_7$
+	\quad $S_5 \rightarrow cS_5d$ | $\varepsilon$
+	\quad $S_6 \rightarrow aS_6$ | $a$
+	\quad $S_7 \rightarrow bS_7$ | $b$
+	
+	Ya que si la primera producción es $S \rightarrow S_1S_2$, la palabra que genera es del
+	lenguaje $L_1 = \{a^ib^jc^kd^l: i=j \}$ y si es $S \rightarrow S_4S_5$, la palabra que
+	genera es del lenguaje $L_2 = \{a^ib^jc^kd^l: i \neq j \wedge k = l \}$.
+
+	\item Dada la gramática:
+	
+	$S \rightarrow 01S$ | $010S$ | $101S$ | $\varepsilon$
+	
+	\begin{itemize}
+		\item Determina si es ambigua.
+		\item ¿Eres capaz de encontrar una gramática regular que genere este lenguaje y que no sea ambigua?
+	\end{itemize}
+	
+	La gramática es ambigua ya que la palabra $010101$ tiene dos árboles de derivación:
+	
+	\Tree [.$S$ $010$ [.$S$ $101$ ] ]
+	\Tree [.$S$ $01$ [.$S$ $01$ [.$S$ $01$ ] ] ]
+	
+	La gramática viene generada por el Autómata Finito No Determinista con transiciones nulas($\varepsilon$-AFND):
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[initial,state,accepting] (A) {$A$};
+			\node[state](B) [above right=of A] {$B$};
+			\node[state](C) [above left=of A] {$C$};
+			\node[state](D) [below right=of A] {$D$};
+			\node[state](E) [below left=of A] {$E$};
+			\path[->]
+			(A) edge  [swap] node {0} (B)
+			(A) edge  node {1} (D)
+			(B) edge  [swap] node {1} (C)
+			(D) edge  node {0} (E)
+			(C) edge  node {0, $\varepsilon$} (A)
+			(E) edge  [swap] node {1} (A);
+		\end{tikzpicture}
+	\end{center}
+	
+	Lo pasamos al Autómata Finito Determinista(AFD):
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[initial,state,accepting] (q_0) {$\{A\}$};
+			\node[state](q_1) [below right=of q_0] {$\{B\}$};
+			\node[state](q_2) [above right=of q_0] {$\{D\}$};
+			\node[state](q_3) [right=of q_2] {$\{E\}$};
+			\node[state](q_4) [below right=of q_2] {$\{\emptyset\}$};
+			\node[state,accepting](q_5) [right=of q_1] {$\{A,C\}$};
+			\node[state,accepting](q_6) [below=of q_5] {$\{A,B\}$};
+			\node[state,accepting](q_7) [below right=of q_6] {$\{A,C,D\}$};
+			\node[state,accepting](q_8) [below left=of q_6] {$\{A,B,E\}$};
+			\path[->]
+			(q_0) edge  node {0} (q_1)
+			(q_0) edge  node {1} (q_2)
+			(q_1) edge  node {0} (q_4)
+			(q_1) edge  [swap] node {1} (q_5)
+			(q_2) edge  node {0} (q_3)
+			(q_2) edge  node {1} (q_4)
+			(q_3) edge  node {0} (q_4)
+			(q_3) [swap] edge  [bend right=80] node {1} (q_0)
+			(q_4) edge  [loop right] node {0,1} (q_4)
+			(q_5) edge  [swap] node {0} (q_6)
+			(q_5) edge  [bend left=20] node {1} (q_2)
+			(q_6) edge  [swap] node {0} (q_1)
+			(q_6) edge  node {1} (q_7)
+			(q_7) edge  [bend right=15] node {0} (q_8)
+			(q_7) edge  [bend right=100] node {1} (q_2)
+			(q_8) edge  [swap] node {0} (q_1)
+			(q_8) edge  [bend right=15] node {1} (q_7);
+		\end{tikzpicture}
+	\end{center}
+
+	Por el algoritmo de identificación de estados indistinguibles, obtenemos que $\{A,C\} \equiv \{A,C,D\}$
+	y que $\{A,B\} \equiv \{A,B,E\}$, renombrando los estados, nos queda:
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[initial,state,accepting] (q_0) {$q_0$};
+			\node[state](q_1) [above right=of q_0] {$q_1$};
+			\node[state](q_2) [below right=of q_0] {$q_2$};
+			\node[state](q_3) [right=of q_1] {$q_3$};
+			\node[state](E) [below right=of q_1] {$E$};
+			\node[state,accepting](q_4) [right=of q_2] {$q_4$};
+			\node[state,accepting](q_5) [below=of q_4] {$q_5$};
+			\path[->]
+			(q_0) edge  node {0} (q_2)
+			(q_0) edge  node {1} (q_1)
+			(q_1) edge  node {0} (q_3)
+			(q_1) edge  node {1} (E)
+			(q_2) edge  node {0} (E)
+			(q_2) [swap] edge  node {1} (q_4)
+			(q_3) edge  node {0} (E)
+			(q_3) edge  [bend right=80] node {1} (q_0)
+			(E) edge  [loop right] node {0,1} (E)
+			(q_4) [swap] edge  [bend left] node {0} (q_5)
+			(q_4) [swap] edge  [bend left=15] node {1} (q_1)
+			(q_5) [swap] edge  node {0} (q_2)
+			(q_5) [swap] edge  [bend left] node {1} (q_4);
+		\end{tikzpicture}
+	\end{center}
+	
+	Al haberlo transformado a un AFD, se tiene que podemos transformarlo en una gramática no ambigua:
+	
+	$S \rightarrow 1S_1$ | $0S_2$ | $\varepsilon$\\
+	$S_1 \rightarrow 0S_3$\\
+	$S_2 \rightarrow 1S_4$\\
+	$S_3 \rightarrow 1S$\\
+	$S_4 \rightarrow 1S_1$ | $0S_5$ | $\varepsilon$\\
+	$S_5 \rightarrow 1S_4$ | $0S_2$ | $\varepsilon$\\
+		
+	\item Pasa a Forma Normal de Chomsky la siguiente gramática libre de contexto:
+	
+	$S \rightarrow S_1$ | $S_2S_3a$ | $aS_4cd$ | $S_5S_4S_6$\\
+	$S_1 \rightarrow aS_1b$ | $c$\\
+	$S_2 \rightarrow S_3S_4$ | $S_5S_3d$ | $S_1d$ | $\varepsilon$\\
+	$S_3 \rightarrow S_3c$ | $S_2b$ | $S_1aS_5$ | $c$\\
+	$S_4 \rightarrow aS_4d$ | $S_4d$ | $\varepsilon$\\
+	$S_5 \rightarrow aaS_5S_2$ | $S_5S_6S_7$\\
+	$S_6 \rightarrow aS_6d$ | $d$\\
+	
+	Primero, eliminamos los símbolos y producciones inútiles, y nos queda:
+	
+	$S \rightarrow S_1$ | $S_2S_3a$ | $aS_4cd$\\
+	$S_1 \rightarrow aS_1b$ | $c$\\
+	$S_2 \rightarrow S_1d$ | $S_3S_4$| $\varepsilon$\\
+	$S_3 \rightarrow S_2b$ | $S_3c$ | $c$\\
+	$S_4 \rightarrow aS_4d$ | $S_4d$ | $\varepsilon$\\
+	
+	Ahora, eliminamos las producciones nulas, con lo que nos queda:
+	
+	$S \rightarrow S_1$ | $S_2S_3a$ | $S_3a$ | $aS_4cd$ | $acd$\\
+	$S_1 \rightarrow aS_1b$ | $c$\\
+	$S_2 \rightarrow S_1d$ | $S_3$ | $S_3S_4$\\
+	$S_3 \rightarrow S_2b$ | $S_3c$  | $b$ | $c$\\
+	$S_4 \rightarrow aS_4d$ | $S_4d$ | $ad$ | $d$\\
+	
+	A continuación, eliminamos las producciones unarias, y queda:
+	
+	$S \rightarrow aS_1b$ | $S_2S_3a$ | $S_3a$ | $aS_4cd$ | $acd$ | $c$\\
+	$S_1 \rightarrow aS_1b$ | $c$\\
+	$S_2 \rightarrow S_1d$ | $S_2b$ | $S_3c$ | $S_3S_4$ | $b$ | $c$\\
+	$S_3 \rightarrow S_2b$ | $S_3c$  | $b$ | $c$\\
+	$S_4 \rightarrow aS_4d$ | $S_4d$ | $ad$ | $d$\\
+	
+	Finalmente, llegamos a la Forma Normal de Chomsky:
+	
+	$S \rightarrow C_aD_1$ | $S_2D_2$ | $S_3C_a$ | $C_aD_3$ | $C_aD_4$ | $c$\\
+	$S_1 \rightarrow C_aD_1$ | $c$\\
+	$S_2 \rightarrow S_1C_d$ | $S_2C_b$ | $S_3C_c$ | $S_3S_4$ | $b$ | $c$\\
+	$S_3 \rightarrow S_2C_b$ | $S_3C_c$  | $b$ | $c$\\
+	$S_4 \rightarrow C_aD_5$ | $S_4C_d$ | $C_aC_d$ | $d$\\
+	$C_a \rightarrow a$\\
+	$C_b \rightarrow b$\\
+	$C_c \rightarrow c$\\
+	$C_d \rightarrow d$\\
+	$D_1 \rightarrow S_1C_b$\\
+	$D_2 \rightarrow S_3C_a$\\
+	$D_3 \rightarrow S_4D_4$\\
+	$D_4 \rightarrow C_cC_d$\\
+	$D_5 \rightarrow S_4C_d$\\
+	
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,230 @@
+%%
+% Modificación de una plantilla de Latex para adaptarla al castellano.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%
+% Thin Sectioned Essay
+% LaTeX Template
+% Version 1.0 (3/8/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original Author:
+% Nicolas Diaz (nsdiaz@uc.cl) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper, 11pt]{article} % Font size (can be 10pt, 11pt or 12pt) and paper size (remove a4paper for US letter paper)
+
+\usepackage[protrusion=true,expansion=true]{microtype} % Better typography
+\usepackage[utf8]{inputenc}
+\usepackage{enumerate}
+\usepackage{enumitem}
+
+% sudo apt-get install texlive-lang-spanish
+\usepackage[spanish]{babel} % English language/hyphenation
+\selectlanguage{spanish}
+% Hay que pelearse con babel-spanish para el alineamiento del punto decimal
+\decimalpoint
+
+% Símbolos matemáticos
+\usepackage{amssymb}
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,babel,calc}
+
+\makeatletter
+\renewcommand{\maketitle}{ % Customize the title - do not edit title and author name here, see the TITLE block below
+\begin{flushright} % Right align
+{\LARGE\@title} % Increase the font size of the title
+
+\vspace{50pt} % Some vertical space between the title and author name
+
+{\large\@author} % Author name
+\\\@date % Date
+
+\vspace{40pt} % Some vertical space between the author block and abstract
+\end{flushright}
+}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE
+%----------------------------------------------------------------------------------------
+
+\title{\textbf{Modelos de Computación}\\ % Title
+Relación de Prácticas 3} % Subtitle
+
+\author{\textsc{Óscar Bermúdez} % Author
+\\{\textit{Universidad de Granada}}} % Institution
+
+\date{\today} % Date
+
+%----------------------------------------------------------------------------------------
+\begin{document}
+
+\maketitle % Print the title section
+
+\begin{enumerate}
+	\item Obtener un AFD capaz de aceptar las cadenas $u \in \{0,1\}^*$, que contengan simultánemente las cadenas $000$ y $111$.
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[state,initial] (q_0)   {};
+			\node[state] (q_1) [above right=of q_0] {};
+			\node[state] (q_2) [below right=of q_0] {};
+			\node[state] (q_3) [above right=of q_1] {};
+			\node[state] (q_4) [below right=of q_2] {};
+			\node[state] (q_5) [right=of q_3] {};
+			\node[state] (q_6) [right=of q_4] {};
+			\node[state] (q_7) [right=of q_5] {};
+			\node[state] (q_8) [right=of q_6] {};
+			\node[state] (q_9) [below right=of q_7] {};
+			\node[state] (q_10) [above right=of q_8] {};
+			\node[state,accepting](q_11) [above right=of q_10] {};
+			\node[state] (q_12) at ($(q_0)!0.5!(q_11)$) {};
+			\path[->]
+			(q_0) edge  node {0} (q_1)
+			(q_0) edge  [swap] node {1} (q_2)
+			(q_1) edge  node {0} (q_3)
+			(q_1) edge  node {1} (q_12)
+			(q_2) edge  node {0} (q_12)
+			(q_2) edge  [swap] node {1} (q_4)
+			(q_3) edge  node {0} (q_5)
+			(q_3) edge  node {1} (q_12)
+			(q_4) edge  node {0} (q_12)
+			(q_4) edge  [swap] node {1} (q_6)
+			(q_5) edge  node {0} (q_12)
+			(q_5) edge  node {1} (q_7)
+			(q_6) edge  [swap] node {0} (q_8)
+			(q_6) edge  node {1} (q_12)
+			(q_7) edge  node {0} (q_12)
+			(q_7) edge  node {1} (q_9)
+			(q_8) edge  [swap] node {0} (q_10)
+			(q_8) edge  node {1} (q_12)
+			(q_9) edge  node {0} (q_12)
+			(q_9) edge  node {1} (q_11)
+			(q_10) edge  [swap] node {0} (q_11)
+			(q_10) edge  node {1} (q_12)
+			(q_11) edge [bend left=60] node {0} (q_8)
+			(q_11) [swap] edge [bend right=60] node {1} (q_7)
+			(q_12) edge [loop left]  node {0,1} (q_12);
+		\end{tikzpicture}
+	\end{center}
+	\pagebreak
+	\item Obtener un AFD equivalente al siguiente AFND:
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[state,initial] (q_1)   {$q_1$};
+			\node[state] (q_2) [right=of q_1] {$q_2$};
+			\node[state] (q_3) [right=of q_2] {$q_3$};
+			\node[state,accepting] (q_4) [right=of q_3] {$q_4$};
+			\path[->]
+			(q_1) edge  [loop above] node {0,1} (q_1)
+			(q_1) edge  node {1} (q_2)
+			(q_2) edge  node {0, $\varepsilon$} (q_3)
+			(q_3) edge  node {0,1} (q_4)
+			(q_4) edge  [loop above] node {0,1} (q_4);
+		\end{tikzpicture}
+	\end{center}
+	
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[state,initial] (q_0)   {$\{q_1\}$};
+			\node[state] (q_1) [right=of q_0] {$\{q_1,q_2,q_3\}$};
+			\node[state,accepting] (q_2) [below right=of q_1] {$\{q_1,q_3,q_4\}$};
+			\node[state,accepting] (q_3) [above right=of q_1] {$\{q_1,q_2,q_3,q_4\}$};
+			\node[state,accepting] (q_4) [above right=of q_2] {$\{q_1,q_4\}$};
+			\path[->]
+			(q_0) edge  [loop above] node {0} (q_1)
+			(q_0) edge  node {1} (q_1)
+			(q_1) edge  node {0} (q_2)
+			(q_1) edge  node {1} (q_3)
+			(q_2) edge  node {0} (q_4)
+			(q_2) edge  [bend left=10] node {1} (q_3)
+			(q_3) edge  [bend left=10] node {0} (q_2)
+			(q_3) edge  [loop above] node {1} (q_3)
+			(q_4) edge  [loop right] node {0} (q_3)
+			(q_4) edge  node {1} (q_3);
+		\end{tikzpicture}
+	\end{center}
+	\pagebreak
+	\item \begin{enumerate}[label=\alph*)]
+		\item Construir un AFND a partir de cada una de las siguientes expresiones regulares:
+		\begin{itemize}
+			\item $(aa)^*b^*$
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial above,accepting] (q_0)   {$q_0$};
+					\node[state] (q_1) [right=of q_0] {$q_1$};
+					\node[state,accepting] (q_2) [left=of q_0] {$q_2$};
+					\path[->]
+					(q_0) edge  [bend left] node {a} (q_1)
+					(q_0) edge  node {b} (q_2)
+					(q_1) edge  [bend left] node {a} (q_0)
+					(q_2) edge  [loop left]node {b} (q_2);
+				\end{tikzpicture}
+			\end{center}
+			\item $a(b+a)^*b$
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial] (q_0)   {$q_0$};
+					\node[state] (q_1) [right=of q_0] {$q_1$};
+					\node[state,accepting] (q_2) [right=of q_1] {$q_2$};
+					\path[->]
+					(q_0) edge  node {a} (q_1)
+					(q_1) edge  node {b} (q_2)
+					(q_1) edge  [loop above] node {a,b} (q_1);
+				\end{tikzpicture}
+			\end{center}
+		\end{itemize}
+		\item Transformar los AFND's obtenidos en el apartado anterior a AFD's.
+		\begin{itemize}
+			\item $(aa)^*b^*$
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial above,accepting] (q_0)   {$\{q_0\}$};
+					\node[state] (q_1) [right=of q_0] {$\{q_1\}$};
+					\node[state,accepting] (q_2) [left=of q_0] {$\{q_2\}$};
+					\node[state] (q_3) [below=of q_0] {$\{\}$};
+					\path[->]
+					(q_0) edge  [bend left] node {a} (q_1)
+					(q_0) edge  [swap] node {b} (q_2)
+					(q_1) [swap] edge  [bend left] node {a} (q_0)
+					(q_1) edge  [swap] node {b} (q_3)
+					(q_2) edge  [loop left] node {b} (q_2)
+					(q_2) edge  node {a} (q_3)
+					(q_3) edge  [loop below]node {a,b} (q_3);
+				\end{tikzpicture}
+			\end{center}
+			\item $a(b+a)^*b$
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial below] (q_0)   {$\{q_0\}$};
+					\node[state] (q_1) [right=of q_0] {$\{q_1\}$};
+					\node[state,accepting] (q_2) [right=of q_1] {$\{q_1,q_2\}$};
+					\node[state] (q_3) [left=of q_0] {$\{\}$};
+					\path[->]
+					(q_0) edge  node {a} (q_1)
+					(q_0) edge  [swap] node {b} (q_3)
+					(q_1) edge  [loop above] node {a} (q_1)
+					(q_1) edge  [bend left] node {b} (q_2)
+					(q_2) edge  [bend left] node {a} (q_1)
+					(q_2) edge  [loop right] node {b} (q_2)
+					(q_3) edge  [loop left] node {a,b} (q_3);
+				\end{tikzpicture}
+			\end{center}
+		\end{itemize}
+	\end{enumerate}
+\end{enumerate}
+\end{document}

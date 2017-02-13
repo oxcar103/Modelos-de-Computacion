@@ -1,0 +1,141 @@
+%%
+% Modificación de una plantilla de Latex para adaptarla al castellano.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%
+% Thin Sectioned Essay
+% LaTeX Template
+% Version 1.0 (3/8/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original Author:
+% Nicolas Diaz (nsdiaz@uc.cl) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper, 11pt]{article} % Font size (can be 10pt, 11pt or 12pt) and paper size (remove a4paper for US letter paper)
+
+\usepackage[protrusion=true,expansion=true]{microtype} % Better typography
+\usepackage{graphicx} % Required for including pictures
+\usepackage[usenames,dvipsnames]{color} % Coloring code
+\usepackage{wrapfig} % Allows in-line images
+\usepackage[utf8]{inputenc}
+\usepackage{enumerate}
+\usepackage{enumitem}
+
+% sudo apt-get install texlive-lang-spanish
+\usepackage[spanish]{babel} % English language/hyphenation
+\selectlanguage{spanish}
+% Hay que pelearse con babel-spanish para el alineamiento del punto decimal
+\decimalpoint
+\usepackage{dcolumn}
+\newcolumntype{d}[1]{D{.}{\esperiod}{#1}}
+\makeatletter
+\addto\shorthandsspanish{\let\esperiod\es@period@code}
+\makeatother
+
+\usepackage{longtable}
+\usepackage{tabu}
+\usepackage{supertabular}
+
+\usepackage{multicol}
+\newsavebox\ltmcbox
+
+% Símbolos matemáticos
+\usepackage{amssymb}
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+
+\usepackage[section]{placeins} % Para gráficas en su sección.
+\usepackage{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Required for accented characters
+\newenvironment{allintypewriter}{\ttfamily}{\par}
+\setlength{\parindent}{0pt}
+\parskip=8pt
+\linespread{1.05} % Change line spacing here, Palatino benefits from a slight increase by default
+
+\makeatletter
+\renewcommand\@biblabel[1]{\textbf{#1.}} % Change the square brackets for each bibliography item from '[1]' to '1.'
+\renewcommand{\@listI}{\itemsep=0pt} % Reduce the space between items in the itemize and enumerate environments and the bibliography
+\newcommand{\imagen}[2]{\begin{center} \includegraphics[width=90mm]{#1} \\#2 \end{center}}
+
+\renewcommand{\maketitle}{ % Customize the title - do not edit title and author name here, see the TITLE block below
+\begin{flushright} % Right align
+{\LARGE\@title} % Increase the font size of the title
+
+\vspace{50pt} % Some vertical space between the title and author name
+
+{\large\@author} % Author name
+\\\@date % Date
+
+\vspace{40pt} % Some vertical space between the author block and abstract
+\end{flushright}
+}
+
+%----------------------------------------------------------------------------------------
+%	TITLE
+%----------------------------------------------------------------------------------------
+
+\title{\textbf{Modelos de Computación}\\ % Title
+Relación de Prácticas 1} % Subtitle
+
+\author{\textsc{Óscar Bermúdez} % Author
+\\{\textit{Universidad de Granada}}} % Institution
+
+\date{\today} % Date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title section
+
+\begin{enumerate}
+	\item Describir el lenguaje generado por las siguientes gramáticas:
+		\begin{enumerate}[label=\alph*)]
+			\item $S \rightarrow aS_1b$ \quad $S_1 \rightarrow aS_1$ | $bS_1$ | $\varepsilon$ \\
+			Por la condición inicial de $S$, las palabras del lenguaje generado siempre empezarán por $a$ y terminarán por $b$, y como $S_1$ puede añadir tanto $a$ como $b$, el lenguaje generado es $L=\{aA^*b\}$ con $A=\{a,b\}$.
+			\item $S \rightarrow aSb$ | $S_1$ \quad $S_1 \rightarrow \varepsilon$ \\
+			Por la condición de $S$, o se genera una $a$ a la izquierda y una $b$ a la derecha o se pasa a $S_1$. Como $S_1$ siempre da lugar al carácter vacío $\varepsilon$, el lenguaje generado es $L=\{a^ib^i: i \in \mathbb{N}\}$.
+			\item $S \rightarrow aSb$ | $S_1$ \quad $S_1 \rightarrow c$ | $\varepsilon$ \\
+			Por la condición de $S$, o se genera una $a$ a la izquierda y una $b$ a la derecha o se pasa a $S_1$. Como $S_1$ da lugar a $c$ o al carácter vacío $\varepsilon$, el lenguaje generado es $L=\{a^ib^i: i \in \mathbb{N}\} \cup \{a^icb^i: i \in \mathbb{N}\}$.
+			\item $S \rightarrow aSb$ | $S_1$ \quad $S_1 \rightarrow cS_1d$ | $\varepsilon$ \\
+			Por la condición de $S$, o se genera una $a$ a la izquierda y una $b$ a la derecha o se pasa a $S_1$. Y por la condición de $S_1$, o se genera una $c$ a la izquierda y una $d$ a la derecha o el carácter vacío $\varepsilon$, el lenguaje generado es $L=\{a^ic^jd^jb^i: i,j \in \mathbb{N}\}$.
+					
+			\item $S \rightarrow aSb$ | $S_1$ \quad $S_1 \rightarrow aS_1$ | $bS_1$ | $\varepsilon$ \\
+			Dado que $S$ puede dar lugar a $S_1$ y que $S_1$ puede generar cualquier palabra de $A=\{a,b\}$, el lenguaje generado es $L=A^*$ con $A=\{a,b\}$.
+		\end{enumerate}
+		
+	\newpage
+	
+	\item Encontrar una gramática regular o una gramática libre de contexto que genere los siguientes lenguajes en el alfabeto $\textbf{A=\{a,b,c\}}$:
+		\begin{itemize}
+			\item $u \in A^*$ si y solamente si verifica que $u$ empieza por el símbolo $'a'$ y acaba con el símbolo $'c'$.\\
+			$S \rightarrow aS_1$ \quad $S_1 \rightarrow aS_1$ | $bS_1$ | $cS_1$ | $c$
+			\item $u \in A^*$ si y solamente si verifica que $u$ contiene un número par de símbolos $a$.\\
+			$S \rightarrow aS_1$ | $bS$ | $cS$ | $\varepsilon$ \quad $S_1 \rightarrow aS$ | $bS_1$ | $cS_1$
+			\item $u \in A^*$ si y solamente si verifica que $u$ tiene un número impar de símbolos y la letra central coincide con la última.\\
+			$S \rightarrow S_4S_1a$ | $S_4S_2b$ | $S_4S_3c$ | $S_4$ | $\varepsilon$ \quad $S_1 \rightarrow S_4S_1S_4$ | $a$ \newline $S_2 \rightarrow S_4S_2S_4$ | $b$ \quad $S_3 \rightarrow S_4S_3S_4$ | $c$ \quad $S_4 \rightarrow a$ | $b$ | $c$
+		\end{itemize}
+	
+	\item Determinar si el lenguaje sobre el alfabeto $A=\{a,b\}$ generado por la siguiente gramática es regular(justifica la respuesta).
+		\begin{center}
+			$S \rightarrow S_1bS_2$ \quad $S_1 \rightarrow aS_1$ | $\varepsilon$ \quad $S_2 \rightarrow aS_2$ | $bS_2$ | $\varepsilon$
+		\end{center}
+		Esta gramática es equivalente a la gramática regular:
+		\begin{center}
+			$S \rightarrow aS$ | $bS_1$ \quad $S_1 \rightarrow aS_1$ | $bS_1$ | $\varepsilon$
+		\end{center}
+		Ambas generan el lenguaje $L=\{a^ibA^*: i \in \mathbb{N}\}$ con $A=\{a,b\}$.
+\end{enumerate}
+\end{document}

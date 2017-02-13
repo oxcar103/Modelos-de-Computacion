@@ -1,0 +1,84 @@
+\documentclass[a4paper, 11pt]{article} % Font size (can be 10pt, 11pt or 12pt) and paper size (remove a4paper for US letter paper)
+
+\usepackage[utf8]{inputenc}
+% sudo apt-get install texlive-lang-spanish
+\usepackage[spanish]{babel} % English language/hyphenation
+\selectlanguage{spanish}
+
+\makeatletter
+\renewcommand{\maketitle}{ % Customize the title - do not edit title and author name here, see the TITLE block below
+\begin{center}
+{\LARGE\@title} % Increase the font size of the title
+\end{center}
+
+\vspace{30pt} % Some vertical space between the title and author name
+
+\begin{flushright} % Right align
+{\large\@author} % Author name
+\\\@date % Date
+
+\vspace{20pt} % Some vertical space between the author block and abstract
+\end{flushright}
+}
+\makeatother
+
+%----------------------------------------------------------------------------------------
+%	TITLE
+%----------------------------------------------------------------------------------------
+
+\title{\textbf{Práctica de Modelos de Computación}\\ % Title
+Práctica con Lex} % Subtitle
+
+\author{\textsc{Óscar Bermúdez} % Author
+\\{\textit{Universidad de Granada}}} % Institution
+
+\date{\today} % Date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title section
+
+\tableofcontents
+
+\newpage
+
+\section{Planteamiento del Problema}
+	Cuando redactamos un texto científico en \textit{LaTeX}, con frecuencia introducimos ciertas funciones en dicho texto y, para facilitar la comprensión del texto por parte del lector, suelen ir acompañadas de sus gráficas.
+	
+	Añadir dichas gráficas es una tarea larga y tediosa. Esto se debe al hecho de que, aunque el código entre 2 gráficas es relativamente similar, debido a que para cada gráfica son necesarias unas 10 líneas o más, es bastante probable que cometamos algún error en la escritura del mismo.
+	
+	Por tanto, se podría pensar en la implementación de un ejecutable que recorra un archivo .tex en busca de funciones y que, al finalizar el párrafo en el que están(para no romper la estructura de dicho párrafo), inserte la gráfica asociada a las funciones que aparecieron.
+
+\section{Presentación de la Solución}
+	\subsection{Búsqueda de una función}
+		En primer lugar, como nuestras funciones trabajarán con números reales, debemos definir lo que es un número real en Lex.
+		
+		Después, dividiremos una función en parte izquierda y derecha de la igualdad. En nuestro ejecutable, sólo permitiremos las funciones en forma explícita.
+		
+		Las funciones que podemos tomar son de muy diversa forma. Por ello, dividiremos una función en sus sumandos, y como una expresión es función si cada sumando lo es, dividimos el problema a resolver si cada sumando es función.
+		
+		Dentro de cada sumando, buscamos si tenemos un polinomio, una función exponencial, un logaritmo, seno, coseno,$\dots$
+		
+		Una vez comprobado que la expresión es una función, se añade a una lista para almacenar todas las funciones del párrafo a la espera de que se acabe dicho párrafo.
+		
+	\subsection{Trazado de las gráficas}
+		Una vez que el párrafo acabó, se procede a escribir las líneas para dibujar la gráfica de la función.
+		
+		Lo primero es introducir el paquete \textbf{tikz} que nos permitirá dibujarlas, para ello, hemos de buscar una expresión que aparezca una sola vez en un archivo \textbf{.tex} y siempre aparezca, en este caso, se ha escogido "\textit{$\backslash$documentclass}".
+		
+		Una vez hecho esto, dibujamos los ejes de la gráfica y los numeramos.
+		
+		Para finalizar, introducimos las gráficas que aparecieron en el párrafo anterior(con diferentes colores para diferenciarlas en el caso de que en dicho párrafo aparecieran varias) junto con una etiqueta para saber qué gráfica estamos representando.
+		
+		El paquete que nos permite dibujar gráficas en \textit{LaTeX} dispone de 16 colores para dibujarlas, de los cuales, nosotros nos quedaremos con 10 que introduciremos en un array e iremos rotándolos.
+		
+	\subsection{Tratamiento de las funciones}
+		Antes de introducir las gráficas, debemos transformalas ya que el formato de \textit{LaTeX} es distinto al formato que se requiere para escribirlas en este paquete.
+		
+		Por ejemplo, la multiplicación pasa de ser $"x \cdot y"$ a ser $"x*y"$, la potencia pasa de ser $"x^n"$ a ser $"x**n"$.
+		
+		Además, aprovechamos para quitar espacios innecesarios y como sólo necesitamos la parte derecha, la parte izquierda y el igual, los eliminamos.
+
+\end{document}

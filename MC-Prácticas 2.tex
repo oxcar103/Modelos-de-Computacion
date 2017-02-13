@@ -1,0 +1,218 @@
+%%
+% Modificación de una plantilla de Latex para adaptarla al castellano.
+%%
+
+%%%%%%%%%%%%%%%%%%%%%
+% Thin Sectioned Essay
+% LaTeX Template
+% Version 1.0 (3/8/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original Author:
+% Nicolas Diaz (nsdiaz@uc.cl) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper, 11pt]{article} % Font size (can be 10pt, 11pt or 12pt) and paper size (remove a4paper for US letter paper)
+
+\usepackage[protrusion=true,expansion=true]{microtype} % Better typography
+\usepackage[utf8]{inputenc}
+\usepackage{enumerate}
+\usepackage{enumitem}
+
+% sudo apt-get install texlive-lang-spanish
+\usepackage[spanish]{babel} % English language/hyphenation
+\selectlanguage{spanish}
+% Hay que pelearse con babel-spanish para el alineamiento del punto decimal
+\decimalpoint
+
+% Símbolos matemáticos
+\usepackage{amssymb}
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,babel}
+
+\makeatletter
+\renewcommand{\maketitle}{ % Customize the title - do not edit title and author name here, see the TITLE block below
+\begin{flushright} % Right align
+{\LARGE\@title} % Increase the font size of the title
+
+\vspace{50pt} % Some vertical space between the title and author name
+
+{\large\@author} % Author name
+\\\@date % Date
+
+\vspace{40pt} % Some vertical space between the author block and abstract
+\end{flushright}
+}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE
+%----------------------------------------------------------------------------------------
+
+\title{\textbf{Modelos de Computación}\\ % Title
+Relación de Prácticas 2} % Subtitle
+
+\author{\textsc{Óscar Bermúdez} % Author
+\\{\textit{Universidad de Granada}}} % Institution
+
+\date{\today} % Date
+
+%----------------------------------------------------------------------------------------
+\begin{document}
+
+\maketitle % Print the title section
+
+\begin{enumerate}
+	\item Considere el siguiente $AFD$ $M=(Q, A, \partial, q_0, F)$, donde
+	\begin{itemize}
+		\item $Q =\{q_0, q_1, q_2\}$
+		\item $A=\{0,1\}$
+		\item La función de transición viene dada por:
+		\begin{itemize}[label=]
+			\item $\partial (q_0, 0) = q_1$
+			\item $\partial (q_0, 1) = q_0$
+			\item $\partial (q_1, 0) = q_2$
+			\item $\partial (q_1, 1) = q_0$
+			\item $\partial (q_2, 0) = q_2$
+			\item $\partial (q_2, 1) = q_2$
+		\end{itemize}
+		\item $F=\{q_2\}$
+	\end{itemize}
+	Describa informalmente el lenguaje aceptado:\\
+	
+	Primero, dibujaremos el AFD para aclararnos qué significan las condiciones anteriores:
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[state,initial] (q_0)   {$q_0$};
+			\node[state] (q_1) [right=of q_0] {$q_1$};
+			\node[state,accepting](q_2) [right=of q_1] {$q_2$};
+			\path[->]
+			(q_0) edge  [bend left] node {0} (q_1)
+			(q_0) edge  [loop above] node {1} (q_0)
+			(q_1) edge  node {0} (q_2)
+			(q_1) edge  [bend left] node {1} (q_0)
+			(q_2) edge  [loop above] node {0,1} (q_2);
+		\end{tikzpicture}
+	\end{center}
+	Como podemos ver, una vez lleguemos a $q_2$, cualquier palabra será válida. Para llegar a $q_2$ basta encontrar la subcadena $00$.\\
+	Por tanto, el lenguaje generado es $L=\{A^*00A^*\}$ con $A=\{0,1\}$.
+	
+	\item Dibujar los AFDs que aceptan los siguientes lenguajes con alfabeto $\{0,1\}$:
+	\begin{enumerate}[label=\alph*)]
+		\item El lenguaje vacío, $\emptyset$.
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial] (q_0) {};
+					\path[->]
+					(q_0) edge  [loop right] node {0,1} (q_0);
+				\end{tikzpicture}
+			\end{center}
+		\item El lenguaje formado por la palabra vacía, o sea, $\{\varepsilon\}$.
+			\begin{center}
+				\begin{tikzpicture}[auto]
+					\node[state,initial,accepting] (q_0) {};
+					\node[state] (q_1) [right=of q_0] {};
+					\path[->]
+					(q_0) edge  node {0,1} (q_1)
+					(q_1) edge  [loop right] node {0,1} (q_1);
+				\end{tikzpicture}
+			\end{center}
+		\item El lenguaje formado por la palabra $01$, o sea, $\{01\}$.
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial] (q_0) {};
+					\node[state] (q_1) [right=of q_0] {};
+					\node[state, accepting] (q_2) [right=of q_1] {};
+					\node[state] (e) [below=of q_1] {};
+					\path[->]
+					(q_0) edge node {0} (q_1)
+					(q_0) edge [swap] node {1} (e)
+					(q_1) edge node {0} (e)
+					(q_1) edge node {1} (q_2)
+					(q_2) edge node {0,1} (e)
+					(e) edge [loop below] node {0,1} (e);
+				\end{tikzpicture}
+			\end{center}
+		\item El lenguaje $\{11,00\}$.
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial] (q_0) {};
+					\node[state] (q_1) [above=of q_0] {};
+					\node[state, accepting] (q_2) [right=of q_1] {};
+					\node[state] (q_3) [below=of q_0] {};
+					\node[state, accepting] (q_4) [right=of q_3] {};
+					\node[state] (e) [right=of q_0] {};
+					\path[->]
+					(q_0) edge node {0} (q_1)
+					(q_0) edge [swap] node {1} (q_3)
+					(q_1) edge node {0} (q_2)
+					(q_1) edge [swap] node {1} (e)
+					(q_2) edge node {0,1} (e)
+					(q_3) edge node {0} (e)
+					(q_3) edge [swap] node {1} (q_4)
+					(q_4) edge [swap] node {0,1} (e)
+					(e) edge [loop right] node {0,1} (e);
+				\end{tikzpicture}
+			\end{center}
+		\item El lenguaje formado por sucesiones de la subcadena $'01'$ incluyendo la cadena vacía, o sea, $\{\varepsilon, 01, 0101, 010101,\dots\}$.
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial, accepting] (q_0) {};
+					\node[state] (q_1) [right=of e] {};
+					\node[state] (e) [right=of q_0] {};
+					\path[->]
+					(q_0) edge [bend left=50] node {0} (q_1)
+					(q_0) edge node {1} (e)
+					(q_1) edge [swap] node {0} (e)
+					(q_1) edge [bend left=75] node {1} (q_0)
+					(e) edge [loop below] node {0,1} (e);
+				\end{tikzpicture}
+			\end{center}
+		\item El lenguaje formado por las cadenas donde el número de $1's$ es divisible por 3.
+			\begin{center}
+				\begin{tikzpicture}[>=stealth,auto]
+					\node[state,initial,accepting] (q_0) {};
+					\node[state] (q_1) [right=of q_0] {};
+					\node[state] (q_2) [right=of q_1] {};
+					\path[->]
+					(q_0) edge [loop above] node {0} (q_0)
+					(q_0) edge node {1} (q_1)
+					(q_1) edge [loop above] node {0} (q_1)
+					(q_1) edge node {1} (q_2)
+					(q_2) edge [loop above] node {0} (q_2)
+					(q_2) edge [bend left=40] node {1} (q_0);
+				\end{tikzpicture}
+			\end{center}
+	\end{enumerate}
+	\item Dado el siguiente autómata $M$, describir el lenguaje aceptado por dicho autómata:
+	\begin{center}
+		\begin{tikzpicture}[>=stealth,auto]
+			\node[state,initial] (q_0) {};
+			\node[state] (q_1) [right=of q_0] {};
+			\node[state,accepting](q_2) [right=of q_1] {};
+			\path[->]
+			(q_0) edge  [loop above] node {b} (q_0)
+			(q_0) edge  node {a} (q_1)
+			(q_1) edge  [loop above] node {b} (q_1)
+			(q_1) edge  [bend left] node {a} (q_2)
+			(q_2) edge  [loop above] node {b} (q_2)
+			(q_2) edge  [bend left] node {a} (q_1);
+		\end{tikzpicture}\\
+	\end{center}
+	Genera el lenguaje $L=\{b^ia(b^ja)^{2k+1}b^l: i,j,k,l \in \mathbb{N}\}$ con $A=\{a,b\}$.
+\end{enumerate}
+\end{document}

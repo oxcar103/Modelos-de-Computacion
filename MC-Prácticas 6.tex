@@ -1,0 +1,190 @@
+%%
+% Plantilla de Memoria
+% Modificación de una plantilla de Latex de Nicolas Diaz para adaptarla 
+% al castellano y a las necesidades de escribir informática y matemáticas.
+%
+% Editada por: Mario Román
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%%
+
+%%%%%%%%%%%%%%%%%%%%%
+% Thin Sectioned Essay
+% LaTeX Template
+% Version 1.0 (3/8/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original Author:
+% Nicolas Diaz (nsdiaz@uc.cl) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PAQUETES Y CONFIGURACIÓN DEL DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+%% Configuración del papel.
+% microtype: Tipografía.
+% mathpazo: Usa la fuente Palatino.
+\documentclass[a4paper, 11pt]{article}
+\usepackage[protrusion=true,expansion=true]{microtype}
+\usepackage{mathpazo}
+
+% Indentación de párrafos para Palatino
+\setlength{\parindent}{0pt}
+  \parskip=8pt
+\linespread{1.05} % Change line spacing here, Palatino benefits from a slight increase by default
+
+
+%% Castellano.
+% noquoting: Permite uso de comillas no españolas.
+% lcroman: Permite la enumeración con numerales romanos en minúscula.
+% fontenc: Usa la fuente completa para que pueda copiarse correctamente del pdf.
+\usepackage[spanish,es-noquoting,es-lcroman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\selectlanguage{spanish}
+
+
+%% Gráficos
+\usepackage{graphicx} % Required for including pictures
+\usepackage{wrapfig} % Allows in-line images
+\usepackage[usenames,dvipsnames]{color} % Coloring code
+
+
+%% Matemáticas
+\usepackage{amsmath}
+
+
+%% Bibliografía
+\makeatletter
+\renewcommand\@biblabel[1]{\textbf{#1.}} % Change the square brackets for each bibliography item from '[1]' to '1.'
+\renewcommand{\@listI}{\itemsep=0pt} % Reduce the space between items in the itemize and enumerate environments and the bibliography
+
+\usepackage{qtree}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+
+%----------------------------------------------------------------------------------------
+%	TÍTULO
+%----------------------------------------------------------------------------------------
+% Configuraciones para el título.
+% El título no debe editarse aquí.
+\renewcommand{\maketitle}{
+  \begin{flushright} % Right align
+  
+  {\LARGE\@title} % Increase the font size of the title
+  
+  \vspace{50pt} % Some vertical space between the title and author name
+  
+  {\large\@author} % Author name
+  \\\@date % Date
+  \vspace{40pt} % Some vertical space between the author block and abstract
+  \end{flushright}
+}
+
+% Título
+\title{\textbf{Modelos de Computación}\\ % Title
+Relación de Prácticas 6} % Subtitle
+
+\author{\textsc{Óscar Bermúdez Garrido} % Author
+\\{\textit{Universidad de Granada}}} % Institution
+
+\date{\today} % Date
+
+
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title section
+
+\begin{enumerate}
+	\item Dar un autómata con pila que acepte las cadenas del siguiente lenguaje por el
+	criterio de pila vacía:
+	
+	\begin{itemize}
+		\item $L = \{a^ib^jc^kd^l / (i=l) \vee (j=k)\}$
+	\end{itemize}
+
+	Primero, construimos una gramática que represente ese lenguaje, por ejemplo:
+	\begin{center}
+		\begin{tabular}{l l}
+			$S \rightarrow S_1$ & $S \rightarrow S_4$ \\
+			$S_1 \rightarrow aS_1d$ | $S_2$ & $S_4 \rightarrow aS_4$ | $S_5S_6$ \\
+			$S_2 \rightarrow bS_2$ | $S_3$ & $S_5 \rightarrow bS_5c$ | $\varepsilon$ \\
+			$S_3 \rightarrow cS_3$ | $\varepsilon$ & $S_6 \rightarrow dS_6$ | $\varepsilon$
+		\end{tabular}
+	\end{center}
+	
+	Ahora, pasamos al autómata con pila asociado:
+	
+	$M=(\{ q \}, \{ a, b, c, d \}, \{ a, b, c, d, S, S_1, S_2, S_3, S_4, S_5, S_6\}, \delta, q, S, \emptyset)$
+
+	\begin{center}
+		\begin{tabular}{l l}
+			$\delta(q, \varepsilon, S)=\{ (q, S_1), (q, S_4) \}$ & $\delta(q, \varepsilon, S_1)=\{ (q, aS_1d), (q, S_2) \}$ \\
+			$\delta(q, \varepsilon, S_2)=\{ (q, bS_2), (q, S_3) \}$ & $\delta(q, \varepsilon, S_3)=\{ (q, cS_3), (q, \varepsilon) \}$ \\
+			$\delta(q, \varepsilon, S_4)=\{ (q, aS_4), (q, S_5S_6) \}$ & $\delta(q, \varepsilon, S_5)=\{ (q, bS_5c), (q, \varepsilon) \}$ \\
+			$\delta(q, \varepsilon, S_6)=\{ (q, dS_6), (q, \varepsilon) \}$ & \\
+			$\delta(q, a, a)=\{ (q, \varepsilon) \}$ & $\delta(q, b, b)=\{ (q, \varepsilon) \}$ \\
+			$\delta(q, c, c)=\{ (q, \varepsilon) \}$ & $\delta(q, d, d)=\{ (q, \varepsilon) \}$ \\
+		\end{tabular}
+	\end{center}
+	
+	\item Dar un autómata con pila determinista que acepte las cadenas definidas sobre el
+	alfabeto $A$ de los siguientes lenguajes por el criterio de pila vacía, si no es posible
+	encontrarlo por ese criterio entonces usar el criterio de estados finales:
+	
+	\begin{enumerate}
+		\item $L_1 = \{ 0^i1^j2^k3^m / i,j,k \geq 0, m=i+j+k \}$ con $A = \{ 0, 1, 2, 3 \}$
+		
+		$M=(\{ q_\varepsilon, q_0, q_1, q_2, q_3 \}, \{ 0, 1, 2, 3 \}, \{ R, X \}, \delta, q_\varepsilon, R, \{q_\varepsilon\})$
+		\begin{center}
+			\begin{tabular}{l l l}
+				$\delta(q_\varepsilon, 0, R)=\{ (q_0, XR) \}$ & $\delta(q_\varepsilon, 1, R)=\{ (q_1, XR) \}$ & $\delta(q_\varepsilon, 2, R)=\{ (q_2, XR) \}$ \\
+				$\delta(q_0, 0, X)=\{ (q_0, XX) \}$ & $\delta(q_0, 1, X)=\{ (q_1, XX) \}$ & $\delta(q_0, 2, X)=\{ (q_2, XX) \}$ \\
+				$\delta(q_0, 3, X)=\{ (q_3, \varepsilon) \}$ & & \\
+				$\delta(q_1, 1, X)=\{ (q_1, XX) \}$ & $\delta(q_1, 2, X)=\{ (q_2, XX) \}$ & $\delta(q_1, 3, X)=\{ (q_3, \varepsilon) \}$ \\
+				$\delta(q_2, 2, X)=\{ (q_2, XX) \}$ & $\delta(q_2, 3, X)=\{ (q_3, \varepsilon) \}$ & \\
+				$\delta(q_3, 3, X)=\{ (q_3, \varepsilon) \}$ & $\delta(q_3, \varepsilon, R)=\{ (q_\varepsilon, \varepsilon) \}$ & \\
+			\end{tabular}
+		\end{center}
+			
+		\item $L_2 = \{ 0^i1^j2^k3^m4 / i,j,k \geq 0, m=i+j+k \}$ con $A = \{ 0, 1, 2, 3, 4 \}$
+		
+		$M=(\{ q_0, q_1, q_2, q_3 \}, \{ 0, 1, 2, 3, 4 \}, \{ R, X\}, \delta, q_0, R, \emptyset)$
+		\begin{center}
+			\begin{tabular}{l l l}
+				$\delta(q_0, 0, R)=\{ (q_0, XR) \}$ & $\delta(q_0, 0, X)=\{ (q_0, XX) \}$ & $\delta(q_0, 1, R)=\{ (q_1, XR) \}$ \\
+				$\delta(q_0, 1, X)=\{ (q_1, XX) \}$ & $\delta(q_0, 2, R)=\{ (q_2, XR) \}$ &  $\delta(q_0, 2, X)=\{ (q_2, XX) \}$ \\
+				$\delta(q_0, 3, X)=\{ (q_3, \varepsilon) \}$ & $\delta(q_0, 4, R)=\{ (q_0, \varepsilon) \}$ & \\
+				$\delta(q_1, 1, X)=\{ (q_1, XX) \}$ & $\delta(q_1, 2, X)=\{ (q_2, XX) \}$ & $\delta(q_1, 3, X)=\{ (q_3, \varepsilon) \}$ \\
+				$\delta(q_2, 2, X)=\{ (q_2, XX) \}$ & $\delta(q_2, 3, X)=\{ (q_3, \varepsilon) \}$ & \\
+				$\delta(q_3, 3, X)=\{ (q_3, \varepsilon) \}$ & & \\
+				$\delta(q_3, 4, R)=\{ (q_3, \varepsilon) \}$ & & \\
+			\end{tabular}
+		\end{center}
+	\end{enumerate}
+	
+	Si en alguno de los lenguajes anteriores no ha sido posible encontrar un autómata con pila
+	determinista por el criterio de pila vacía, entonces justifica por qué no ha sido posible.
+	
+	En el primer lenguaje, no fue posible encontrar un autómata con pila determinista por el
+	criterio de pila vacía porque como el símbolo inicial es siempre $"R"$ y el lenguaje acepta
+	$\varepsilon$ y otras palabras no nulas, tenemos que $\delta(q_0,a,R) \neq \emptyset$ con
+	$a \in A$ y $\delta(q_0,\varepsilon,R) \neq \emptyset$, lo que contradice la definición de
+	autómata con pila determinista.
+\end{enumerate}
+
+\end{document}
